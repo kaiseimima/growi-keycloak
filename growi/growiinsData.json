@@ -1,0 +1,10 @@
+{
+    "registerForm": {
+        "username": "username",
+        "name": "name",
+        "email":"emailexample@gmail.com",
+        "password": "password",
+        "app:globalLang:": "ja_JP"
+    }
+}
+  

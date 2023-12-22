@@ -1,0 +1,109 @@
+{
+    "clientId": "growi",
+    "name": "growi",
+    "rootUrl": "https://growimima.com/",
+    "adminUrl": "https://growimima.com/passport/saml/callback",
+    "enabled": true,
+    "redirectUris": [
+        "https://growimima.com/*"
+    ],
+    "webOrigins": [],
+    "notBefore": 0,
+    "bearerOnly": false,
+    "consentRequired": false,
+    "standardFlowEnabled": true,
+    "implicitFlowEnabled": false,
+    "directAccessGrantsEnabled": false,
+    "serviceAccountsEnabled": false,
+    "publicClient": false,
+    "frontchannelLogout": true,
+    "protocol": "saml",
+    "attributes": {
+        "saml_assertion_consumer_url_redirect": "https://growimima.com/passport/saml/callback",
+        "saml.force.post.binding": "true",
+        "use.refresh.tokens": "true",
+        "saml.signature.algorithm": "RSA_SHA1",
+        "saml.client.signature": "false",
+        "saml.assertion.signature": "true",
+        "saml_assertion_consumer_url_post": "https://growimima.com/",
+        "saml.server.signature": "true",
+        "saml_single_logout_service_url_redirect": "https://growimima.com/passport/saml/callback",
+        "saml_force_name_id_format": "true",
+        "saml.authnstatement": "true",
+        "saml_name_id_format": "username"
+    },
+    "authenticationFlowBindingOverrides": {},
+    "fullScopeAllowed": true,
+    "nodeReRegistrationTimeout": -1,
+    "protocolMappers": [
+        {
+            "name": "lastName",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "lastname",
+                "friendly.name": "lastname",
+                "attribute.name": "lastname"
+            }
+        },
+        {
+            "name": "id",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "id",
+                "friendly.name": "id",
+                "attribute.name": "id"
+            }
+        },
+        {
+            "name": "email",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "email",
+                "friendly.name": "email",
+                "attribute.name": "email"
+            }
+        },
+        {
+            "name": "username",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "username",
+                "friendly.name": "username",
+                "attribute.name": "username"
+            }
+        },
+        {
+            "name": "firstName",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "firstname",
+                "friendly.name": "firstname",
+                "attribute.name": "firstname"
+            }
+        }
+    ],
+    "defaultClientScopes": [
+        "role_list"
+    ],
+    "optionalClientScopes": [],
+    "access": {
+        "view": true,
+        "configure": true,
+        "manage": true
+    }
+}

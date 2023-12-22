@@ -1,0 +1,157 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      # - 127.0.0.1:3000:3000    # change"127.0.0.1:3000:3000"to"3000:3000"
+      - "3000:3000"
+      - "3443:3443"
+    depends_on:
+      - mongo
+      - elasticsearch
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/growi
+      - ELASTICSEARCH_URI=http://elasticsearch:9200/growi
+      - PASSWORD_SEED=changeme
+      - FILE_UPLOAD=local     # activate this line if you use local storage of server rather than AWS
+      - MATHJAX=1             # activate this line if you want to use MathJax
+      - DEBUG=growi:middleware:admin-required
+
+    entrypoint: "dockerize
+                  -wait tcp://mongo:27017
+                  -wait tcp://elasticsearch:9200
+                  -timeout 60s
+                  /docker-entrypoint.sh"
+    command: ["yarn migrate && node -r dotenv-flow/config --expose_gc dist/server/app.js"]
+
+    restart: unless-stopped
+    volumes:
+      - ./growi_data:/data
+    networks:
+      - growi_keycloak
+
+  mongo:
+    image: mongo:4.4
+    restart: unless-stopped
+    volumes:
+      - ./mongo_configdb:/data/configdb
+      - ./mongo_db:/data/db
+    networks:
+      - growi_keycloak
+
+  elasticsearch:
+    build:
+      context: ./elasticsearch
+      dockerfile: ./Dockerfile
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"  # increase amount if you have enough memory
+      - LOG4J_FORMAT_MSG_NO_LOOKUPS=true # CVE-2021-44228 mitigation for Elasticsearch <= 6.8.20/7.16.0
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    restart: unless-stopped
+    volumes:
+      - ./es_data:/usr/share/elasticsearch/data
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    networks:
+      - growi_keycloak
+
+  rev:
+    image: nginx:latest
+    restart: always
+    depends_on:
+      - keycloak
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      # - ./ssl2:/etc/nginx/ssl2:ro
+      - ./ssl_keycloak:/etc/nginx/ssl_keycloak:ro
+      - ./ssl_growi2:/etc/nginx/ssl_growi2:ro
+    networks:
+      - growi_keycloak
+
+  keycloak:
+    build:
+      context: ./keycloak
+      # dockerfile: Dockerfile
+    restart: always
+    image: jboss/keycloak:latest
+    environment:
+      - DB_VENDOR=mysql
+      - DB_ADDR=db
+      - DB_USER=dbuser
+      - DB_PASSWORD=dbpass
+      - DB_DATABASE=keycloak
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - PROXY_ADDRESS_FORWARDING=true
+      - JDBC_PARAMS=&enabledTLSProtocols=TLSv1.2
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    depends_on:
+      - db
+    networks:
+      - growi_keycloak
+
+  db:    
+    restart: always
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: dbpass
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpass
+    ports:
+      - "3306:3306"
+    # command: mysqld --lower_case_table_names=1
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - growi_keycloak
+
+  # とりあえずコメントアウト
+  python-app:
+    restart: always
+    build:
+      context: ./python-app
+    image: python
+    container_name: 'python-app'
+    working_dir: '/root/app'
+    tty: true
+    volumes:
+      - ./python-app:/root/app
+      - ./keycloak/realm.json:/root/app/realm.json
+      - ./keycloak/cp_createGrowiClient.json:/root/app/cp_createGrowiClient.json
+      - ./keycloak/createGrowiClient.json:/root/app/createGrowiClient.json
+      - ./keycloak/users.json:/root/app/users.json
+      - ./growi/growiSaml.json:/root/app/growiSaml.json
+      - ./growi/growiSamlEnabled.json:/root/app/growiSamlEnabled.json
+      - ./growi/growilogData.json:/root/app/growilogData.json
+      - ./growi/growiregData.json:/root/app/growiregData.json
+      - ./growi/growiinsData.json:/root/app/growiinsData.json
+      - ./growi/growisiteUrl.json:/root/app/growisiteUrl.json
+    # depends_on:
+    #   - keycloak
+    # command: python setting.py
+    # command: bash -c "python setting.py"
+    networks:
+      - growi_keycloak
+    
+
+volumes:
+  mysql_data:
+
+networks:
+  growi_keycloak:
+    driver: bridge
+
+

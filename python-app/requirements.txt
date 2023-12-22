@@ -1,0 +1,4 @@
+requests
+python-keycloak
+beautifulsoup4
+lxml

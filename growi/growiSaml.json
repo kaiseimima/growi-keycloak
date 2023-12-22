@@ -1,0 +1,11 @@
+{
+    "missingMandatoryConfigKeys": [],
+    "entryPoint": "https://keycloak_mima.com/auth/realms/new_dev/protocol/saml",
+    "issuer": "growi",
+    "cert": "-----BEGIN CERTIFICATE-----\nQD4vsNb83g==\n-----END CERTIFICATE-----",
+    "attrMapId": "id",
+    "attrMapUsername": "username",
+    "attrMapMail": "email",
+    "attrMapFirstName": "firstName",
+    "attrMapLastName": "lastName"
+}
