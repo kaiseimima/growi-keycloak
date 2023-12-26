@@ -30,7 +30,8 @@
         "saml_single_logout_service_url_redirect": "https://growimima.com/passport/saml/callback",
         "saml_force_name_id_format": "true",
         "saml.authnstatement": "true",
-        "saml_name_id_format": "username"
+        "saml_name_id_format": "username",
+        "saml_assertion_consumer_url_poset": "https://growimima.com/"
     },
     "authenticationFlowBindingOverrides": {},
     "fullScopeAllowed": true,

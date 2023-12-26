@@ -130,7 +130,7 @@ services:
     volumes:
       - ./python-app:/root/app
       - ./keycloak/realm.json:/root/app/realm.json
-      - ./keycloak/cp_createGrowiClient.json:/root/app/cp_createGrowiClient.json
+      # - ./keycloak/cp_createGrowiClient.json:/root/app/cp_createGrowiClient.json
       - ./keycloak/createGrowiClient.json:/root/app/createGrowiClient.json
       - ./keycloak/users.json:/root/app/users.json
       - ./growi/growiSaml.json:/root/app/growiSaml.json
@@ -139,6 +139,7 @@ services:
       - ./growi/growiregData.json:/root/app/growiregData.json
       - ./growi/growiinsData.json:/root/app/growiinsData.json
       - ./growi/growisiteUrl.json:/root/app/growisiteUrl.json
+      - ./params/params.json:/root/app/params.json
     # depends_on:
     #   - keycloak
     # command: python setting.py

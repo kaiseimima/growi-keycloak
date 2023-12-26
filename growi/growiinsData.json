@@ -2,9 +2,8 @@
     "registerForm": {
         "username": "username",
         "name": "name",
-        "email":"emailexample@gmail.com",
+        "email": "email@gmail.com",
         "password": "password",
         "app:globalLang:": "ja_JP"
     }
 }
-  

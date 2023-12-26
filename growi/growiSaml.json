@@ -1,8 +1,8 @@
 {
     "missingMandatoryConfigKeys": [],
-    "entryPoint": "https://keycloak_mima.com/auth/realms/new_dev/protocol/saml",
+    "entryPoint": "https://keycloak_mima.com/auth/realms/test04/protocol/saml",
     "issuer": "growi",
-    "cert": "-----BEGIN CERTIFICATE-----\nQD4vsNb83g==\n-----END CERTIFICATE-----",
+    "cert": "-----BEGIN CERTIFICATE-----\nMIICmzCCAYMCBgGMpcSp/DANBgkqhkiG9w0BAQsFADARMQ8wDQYDVQQDDAZ0ZXN0MDQwHhcNMjMxMjI2MTA1NDM4WhcNMzMxMjI2MTA1NjE4WjARMQ8wDQYDVQQDDAZ0ZXN0MDQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCI2qF4tzaX7VrLRCM/EgPQsX8Adnab3WriQ/0jW1OuWRkATIrDDqDtzW1cTWLFT8PgTd6v6OXIHNqNrkvIJKSyBg/qlSHt1bqVX7d/MU+x8b0zXzTUypwlR2NZf3D2CGBK6/sh3j5ZiBSrrwcYf8nd26hjZpQLvY5oWbu/gsigZ14kLgT0ljmlPh6qChx+8q6IccnFnbRL9cS2z9SDf6bzTi1QSi90N0oHuQGoNJJCNHLPwoKs0hu9lp+V0bsVM+/+t+1EaHUAtLj3ZBvEpZJbomiVh0HQWdbA/6R5H39e2H8pC7IMtLOdx6x5HjNHTOoLwL4anNZ5ibTrVg09HFMhAgMBAAEwDQYJKoZIhvcNAQELBQADggEBACokcWEZXhPqj1IN5MdCMlQI3Ijucb3AkqIgpa3yLZBJsBSxnNo8B+Fu6kZDK8dL25QzZ0yQzFO1FsxBfi+62SBDrw6ozrsODnvcfGRPRt7q7TLLDW49b2AR9pe4SJquze8NS4BIuW5buTblTNFxBMTpH+U/p++FaBMJSjU/qYtwNIDCC2enxTo5VloNSEhfD7yJ/uiSvI71jNcAyB6XjtG03SfaCSFKqZ7ywG1ro3m0cPe+bYYG1aiXplhWWd3LGHvLtoaN/kAhsvqIPwxDCAvtMVNvQ/CGpgNFX9uGkOmapRsiCus/UHzc0+IElpeCVfNST5sPyDsvmgCN9DLcXLc=\n-----END CERTIFICATE-----",
     "attrMapId": "id",
     "attrMapUsername": "username",
     "attrMapMail": "email",

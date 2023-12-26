@@ -1,12 +1,14 @@
 {
-  "username": "user",
-  "enabled": true,
-  "credentials": [
-    {
-      "type": "password",
-      "value": "password",
-      "temporary": false
-    }
-  ],
-  "realmRoles": ["user"]
+    "username": "newusername2",
+    "enabled": true,
+    "credentials": [
+        {
+            "type": "password",
+            "value": "passpss2",
+            "temporary": false
+        }
+    ],
+    "realmRoles": [
+        "user"
+    ]
 }
