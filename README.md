@@ -4,119 +4,48 @@
 DockerでKeycloakとGrowiを立ち上げ、SAML認証のお互いの設定をスクリプトで行う。
 
 
-## Keycloakの設定
- SAML認証の設定のためにRealm, User, Growi用のClientを作成する必要があります。それぞれの設定したい情報は、`keycloak/`の
- * realm.json
- * users.json
- * createGrowiClient.json
- 
+## KeycloakとGrowiの初期設定
 
- にjson形式で書かれています。
- `realm.json`ファイルではkeyclaokのrealm名をいかに記述してください。
- ```realm.json
- {
-    "id": "dev",
-    "realm": "dev",
-    …
- }
- ```
-`users.json`ファイルではSAML認証でGrowiへログインする際の"username"と"password"を設定してください。
- ```users.json
- {
-    "username": "user",
-    …
-    "credentials": [
-    {
-      "type": "password",
-      "value": "password",
-      …
-    }
-    ],
-    …
- }
- ```
-`createGrowiClient.json`ファイルでは以下のurlが記述されている場所にGrowiのurlを記述してください。
- ```createGrowiClient.json
- {
-    …
-    "rootUrl": "https://growi.example.com/",
-    "adminUrl": "https://growi.example.com/passport/saml/callback",
-    …
-    "redirectUris": [
-        "https://growi.example.com/*"
-    ],
-    "attributes": {
-        "saml_assertion_consumer_url_redirect": "https://growi.example.com/passport/saml/callback",
-        …
-        "saml_assertion_consumer_url_post": "https://growi.example.com/",
-        …
-        "saml_single_logout_service_url_redirect": "https://growi.example.com/passport/saml/callback",
-    },
- }
- ```
 
-## Growiの設定
+`paramas.json`に初期設定を書き込んでください。
 
-### 初期設定
-
-Growiでは初期設定、ログインもスクリプトで行うためそれぞれの設定を`growi/`の
- * growiinsData.json
- * growilogData.json
- 
- で設定してください。
-
- growiinsData.jsonでは"username", "name", "email", "password"をそれぞれ以下で設定してください。
- ```growiinsData.json
- {
-    "registerForm": {
-        "username": "username",
-        "name": "name",
-        "email":"emailexample@gmail.com",
-        "password": "password",
-        "app:globalLang:": "ja_JP"
-    }
-}
- ```
- growilogData.jsonでは初期設定で設定した"username"と"password"を設定してください。
- ```growilogData.json
- {
-    "loginForm": {
-        "username": "username",
-        "password": "password"
-    }
-}
- ```
-
-### SAML設定
-次に、`growi/`の
-* growiSiteUrl.json
-* growiSamleEnabeled.json
-* growiSaml.json
-
-でそれぞれ、Growiのurl、SAML設定をONにする、SAML認証のための各種設定を設定してください。
-
-`growiSiteUrl.json`ではGrowiのurlを設定してください。
- ```growiSiteUrl.json
+`python-app/`にある`setjson.py`を実行することでgrowi, keycloakの初期設定やSAML設定に関する情報をjsonファイルに自動的に書き込んでくれます。
+```params.json
 {
-    "siteUrl": "https://growi.example.com"
+    "realmName": "test04",
+    "keycloakUsername": "ssouser",
+    "keycloakPassword": "ssopass",
+    "keycloakUrl": "https://keycloak_mima.com",
+    "growiUrl": "https://growimima.com",
+    "growiUsername": "username",
+    "growiName": "name",
+    "growiEmail": "email@gmail.com",
+    "growiPassword": "password"
 }
- ```
- `growiSamlEnabled.json`では特に設定するものはありません。
- ```growiSamlEnabled.json
- {
-    "isEnabled": true,
-    "authId": "saml"
-}
- ```
- `growiSaml.json`ではkeycloakで設定したRealmに対するSAMLエントリーポイントを設定してください。
- ここでは、keyclaokで`dev`というrealmを作成したと想定しています。
- ```growiSaml.json
- {
-    …
-    "entryPoint": "https://growi.example.com/auth/realms/dev/protocol/saml",
-    …
-}
- ```
+```
+### keycloakに関する設定 ###
+* realmName
+
+にkeycloakに作成するRealmの名前を設定してください。
+* keycloakUsername
+* keucloakPassword
+
+にそれぞれSAML認証のためのusernameとpasswordをそれぞれ設定してください。
+* keycloakUrl
+
+にkeycloakのurlを設定してください。
+
+
+### growiに関する設定 ###
+* growiUrl
+
+にgrowiのurlを設定してください。
+* growiUsername
+* growiName
+* growiEmail
+* growiPassword
+
+ではgrowiのアカウントのusername, name, emailアドレス, passwordをそれぞれ設定してください。
 
 
 ## pythonの設定
@@ -129,6 +58,7 @@ pythonはDockerの公式イメージのpython3を使用しました。
 docker-compose up -d
 docker-compose exec python-app bash
 
+python setjson.py
 python setKeycloak.py 
 python setGrowi.py
 ```
@@ -138,46 +68,15 @@ GrowiでSAMLの設定をする際に、Keycloakのrealmに関するX.509証明�
 ### setKeycloak.py
 
 * `setKeycloak.py`のkeycloak_urlはdocker-compose.ymlでkeycloakを立ち上げているサービス名、ポート番号で設定してください。(ここでは、サービス名は'keyclaok', ポート番号は'8080')
-* `write_realm_to_growijson()`関数内のdata["entryPoint"]のurlはkeycloakのurlを設定してください。
 * `create_realm()`, `create_client()`, `create_users()`関数でrealm, client, userを設定しています。
 また、`get_cert()`, `write_realm_to_growijson(realmName)`でGrowiのSAML認証の設定に必要な設定を`growi/`下のjsonファイルに書き込むので、先にこちらを実行してください。
-```setKeycloak.py
-keycloak_url = 'http://keycloak:8080/auth'
 
-
-def write_realm_to_growijson(realmName):
-    …
-    # "samlCert"の値を更新
-    data["entryPoint"] = "https://sso.example.com/auth/realms/" + realmName + "/protocol/saml"
-    …
-
-sso.example.com
-
-# 実行
-create_realm()
-create_client()
-create_users()
-
-# growiSaml.jsonに証明書のデータを書き込む。
-get_cert()
-# growiSaml.jdonにrealmのデータを書き込む。
-write_realm_to_growijson(realmName)
-```
 
 ### setGrowi.py
 * `setGrowi.py`でも同じように、以下のurlはdocker-compose.ymlでgrowiを立ち上げているサービス名、ポート番号で設定してください(ここでは、サービス名は'app', ポート番号は'3000')
 * 初めて`setGrowi.py`を実行する際にはログインをする`set_login()`を実行する必要はありません。`set_install()`で初期設定が行われます。2回目からは`set_install()`ではなく`set_login()`でログインしてください。
-```setGrowi.py
-insUrl = 'http://app:3000/_api/v3/installer'
-…
-samlEn_url = 'http://app:3000/_api/v3/security-setting/authentication/enabled'
 
-set_install()
-# set_login()
-set_siteUrl()
-set_samlEn()
-set_saml()
-```
+
 # 参考
 
 KeycloakとGrowiの設定は次の記事を参考にさせていただきました。[シングルサインオンサービスKeycloakとWikiシステムGrowiを連携する](https://qiita.com/myoshimi/items/f26cf3f179602a12a5ac)
