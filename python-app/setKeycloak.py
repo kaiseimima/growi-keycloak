@@ -87,18 +87,6 @@ def write_cert_to_growijson(cert_value):
     with open('growiSaml.json', 'w') as json_file:
         json.dump(data, json_file, indent=4)
 
-#growiSaml.jsonにrealmの名前を書き込む関数
-def write_realm_to_growijson(realmName):
-    # growi.jsonファイルを読み込む
-    with open("growiSaml.json", "r") as json_file:
-        data = json.load(json_file)
-
-    # "samlCert"の値を更新
-    data["entryPoint"] = "https://keycloak_mima.com/auth/realms/" + realmName + "/protocol/saml"
-
-    # JSONファイルの書き込み
-    with open('growiSaml.json', 'w') as json_file:
-        json.dump(data, json_file, indent=4)
 
 # 実行
 create_realm()
@@ -107,5 +95,3 @@ create_users()
 
 # growiSaml.jsonに証明書のデータを書き込む。
 get_cert()
-# growiSaml.jdonにrealmのデータを書き込む。
-write_realm_to_growijson(realmName)

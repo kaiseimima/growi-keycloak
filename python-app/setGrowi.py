@@ -68,9 +68,10 @@ def set_saml():
     print(res_sc.status_code)
     print(res_sc.json())
 
-set_install()
+# set_install()
 # set_register()
-# set_login()
+set_login()
+
 set_siteUrl()
 set_samlEn()
 set_saml()

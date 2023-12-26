@@ -1,0 +1,11 @@
+{
+    "realmName": "test04",
+    "keycloakUsername": "newusername2",
+    "keycloakPassword": "passpss2",
+    "keycloakUrl": "https://keycloak_mima.com",
+    "growiUrl": "https://growimima.com",
+    "growiUsername": "username",
+    "growiName": "name",
+    "growiEmail": "email@gmail.com",
+    "growiPassword": "password"
+}
